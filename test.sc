@@ -26,3 +26,15 @@ s.boot;
 s.quit;
 
 {SinOsc.kr(1).poll}.play;
+
+{
+	RLPF.ar(
+		Dust.ar([5, 20]), // input signal, 2 channels
+		LFNoise1.ar([0.3, 0.2]).range(100, 3000), // cutoff freq
+	0.02) // reciprocal of Q
+}.play;
+
+Pbind(\degree, 0, \dur, 0.5).play;
+Pbind(\degree, Pseq([0, 3, 4, 0, 4, 6], 100), \dur, 0.2).play;
+Pbind(\degree, Pseries(-14, 4, 8), \dur, 0.5).play;
+ 
