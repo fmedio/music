@@ -42,7 +42,7 @@ Pbind(\degree, Pseries(-14, 4, 8), \dur, 0.5).play;
 
 ~pattern = Pbind(
 	\degree, Pseq([[0, 1, 4], −1, 2, −3, 4, −3, 7, 11, 4, 2, 0, −3], inf),
-//	\scale, Scale.nairuz,
+	//	\scale, Scale.nairuz,
 	\ctranspose, 3,
 	\dur, Pseq([0.2, 0.1, 0.1], inf),
 	\amp, Pseq([0.7, 0.5, 0.3, 0.2], inf),
@@ -79,11 +79,28 @@ x.free;
 f = {Out.ar(0, BPF.ar(in: In.ar(55), freq: MouseY.kr(200, 5000), rq: 0.01))}.play;
 n = {Out.ar(55, WhiteNoise.ar(0.5))}.play;
 
+
 {FreeVerb.ar(SoundIn.ar([0, 1]), mix: 0.5, room: 0.9)}.play;
+
+
+// Pipe monoBus to left and right out using multichannel expansion
+~monoBus = Bus(s, numChannels: 1);
+{Out.ar(0, [In.ar(~monoBus), In.ar(~monoBus)])}.play;
+{FreeVerb.ar( // Play into bus 55
+	BPF.ar(
+		in: WhiteNoise.ar(0.5),
+		freq: MouseY.kr(200, 5000),
+		rq: 0.1),
+	mix: 0.5,
+	room: 0.9)}.play(outbus: ~monoBus);
+
 
 {Out.ar(0, Saw.ar(freq: [440, 660], mul: Line.kr(0, 1, 10)))}.play;
 // Multichannel expansion
 {Out.ar(0, SinOsc.ar(freq: [800, 880], mul: [LFPulse.ar(2), LFPulse.ar(2)]))}.play;
 
 r = {Out.ar(0, FreeVerb.ar(In.ar(55, 2), mix: 0.5, room: 0.9, mul: 0.4))}.play;
-a = {Out.ar(55, SinOsc.ar(freq: [800, 880], mul: [LFPulse.ar(2), LFPulse.ar(3)]))}.play;
+a = {Out.ar(55, SinOsc.ar(freq: [800, 880], mul: [LFPulse.ar(2), LFPulse.ar(2)]))}.play;
+
+{Pan2.ar(in: PinkNoise.ar, pos: SinOsc.kr(2), level: 0.1)}.play;
+
