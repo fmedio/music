@@ -41,7 +41,7 @@ Pbind(\degree, Pseries(-14, 4, 8), \dur, 0.5).play;
 
 
 ~pattern = Pbind(
-	\degree, Pseq([[0, 1, 4], −1, 2, −3, 4, −3, 7, 11, 4, 2, 0, −3], inf),
+	\degree, Prand([[0, 1, 4], −1, 2, −3, 4, −3, 7, 11, 4, 2, 0, −3], inf),
 	//	\scale, Scale.nairuz,
 	\ctranspose, 3,
 	\dur, Pseq([0.2, 0.1, 0.1], inf),
@@ -60,7 +60,7 @@ Pbind(
 ).play;
 
 Pbind(
-	\freq, Pwhite(100, 500),
+	\freq, Pwhite(440, 2500),
 	\dur, Prand([0.15, 0.25, 0.3], inf),
 	\amp, 0.2,
 	\legato, 0.3
@@ -70,7 +70,7 @@ Pbind(
 
 {SinOsc.ar(freq: LFPulse.kr(5, mul: 440, width: 0.2))}.play;
 
-x = {arg freq = 440, amp = 0.1; SinOsc.ar(freq, 0, amp)}.play
+x = {arg freq = 440, amp = 0.1; SinOsc.ar(freq, 0, amp)}.play;
 x.set(\freq, 778);
 x.set(\freq, 920, \amp, 0.2);
 x.free;
@@ -104,3 +104,32 @@ a = {Out.ar(55, SinOsc.ar(freq: [800, 880], mul: [LFPulse.ar(2), LFPulse.ar(2)])
 
 {Pan2.ar(in: PinkNoise.ar, pos: SinOsc.kr(2), level: 0.1)}.play;
 
+{ Mix.fill(16, {SinOsc.ar(rrand(100, 3000), mul: 0.01)}) }.play;
+
+~cucumber = Buffer.read(s, "/Users/fabrice.medio/Documents/git/music/cucumber.wav");
+
+{PlayBuf.ar(1, ~cucumber, MouseY.kr(-3, 3), loop: 1)}.play(outbus: [0, 1]);
+
+s.plotTree;
+
+{WhiteNoise.ar(Line.kr(0.2, 0, 2), doneAction: 2)}.play;
+{PlayBuf.ar(1, ~cucumber, doneAction: 2)}.play;
+
+// Envelopes
+Env.perc(0.5).plot;
+Env.perc(attackTime: 0.3, releaseTime: 2, level: 0.4).plot;
+{PinkNoise.ar(Env.perc(2).kr(doneAction: 2))}.play;
+
+Env.triangle.plot;
+{SinOsc.ar([440, 442], mul: Env.triangle.kr(2))}.play;
+// Same expression:
+{SinOsc.ar([440, 442]) * Env.triangle.kr(2)}.play;
+
+Env.linen.plot;
+Env.linen(1, 2, 1, 0.02).plot;
+{SinOsc.ar([300, 350], mul: Env.linen(1, 2, 1, 0.2).kr(2))}.play;
+
+(
+var env = Env.pairs([[0, 0], [0.4, 1], [1, 0.2], [1.1, 0.5], [2, 0]], \lin).plot;
+SinOsc.ar([440, 442], mul: env.kr(2));
+);
