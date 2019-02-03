@@ -211,7 +211,7 @@ Pbind(
 
 (
 Pbind(
-	\instrument, "wow",
+	\instrument, "pluck",
 	\scale,
 	Pstutter(8, Pseq([
 		Scale.lydian,
@@ -242,4 +242,18 @@ SynthDef("pluck", {arg amp = 0.1, freq = 440, decay = 5, mutedString = 0.1; var 
 }).add;
 )
 
-Klank
+// From https://rhoadley.net/courses/tech_resources/supercollider/tutorials/cottle/CMSC7105.pdf
+(
+{
+var harmonics = 12, fund = 30;
+Mix.fill(harmonics,
+		{arg count;
+			Pan2.ar(
+				SinOsc.ar(fund * (count+1),
+					mul: max(0.1, FSinOsc.kr(count/5))
+				),
+				0.5
+			)
+		}
+)*0.07}.play
+)
