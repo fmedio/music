@@ -257,3 +257,44 @@ Mix.fill(harmonics,
 		}
 )*0.07}.play
 )
+
+~myControlBus = Bus.control(s, 1);
+{Out.kr(~myControlBus, LFNoise0.kr(5).range(440, 880))}.play;
+{SinOsc.ar(freq: In.kr(~myControlBus))}.play;
+{Pulse.ar(freq: (In.kr(~myControlBus) / 8))}.play;
+
+
+ ~myControl = Bus.control(s, 1);
+c = {Out.kr(~myControl, Pulse.kr(freq: MouseX.kr(1, 10), mul: MouseY.kr(0, 1)))}.play;
+({
+	Blip.ar(
+		freq: LFNoise0.kr([1/2, 1/3]).range(50, 60),
+		numharm: In.kr(~myControl).range(1, 10),
+		mul: LFTri.kr([1/4, 1/6]).range(0, 0.1))
+}.play;
+{
+	Splay.ar(
+		Pulse.ar(
+			freq: LFNoise0.kr([1.4, 1, 1/2, 1/3]).range(100, 1000)
+			* In.kr(~myControl).range(0.9, 1.1),
+			mul: SinOsc.ar([1/3, 1/2, 1/4, 1/8]).range(0, 0.03))
+	)
+}.play;)
+
+c.free;
+
+
+// Create a SynthDef
+SynthDef("simple", {arg freq = 440; Out.ar(0, SinOsc.ar(freq, mul: 0.2))}).add;
+// Creat control buses
+~oneBus = Bus.control(s, 1);
+~anotherBus = Bus.control(s, 1);
+// Start controls
+{Out.kr(~oneBus, LFSaw.kr(1).range(100, 1000))}.play;
+{Out.kr(~anotherBus, LFSaw.kr(2, mul: −1).range(500, 2000))}.play; // Start a note
+
+x = Synth("simple", [\freq, 800]);
+x.set(\freq, ~oneBus.asMap);
+x.set(\freq, ~anotherBus.asMap);
+x.free;
+
