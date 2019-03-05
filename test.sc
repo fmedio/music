@@ -23,11 +23,12 @@ if (100.rand % 2 == 0, {"very true".postln}, {"false".postln} )
 
 {Saw.ar(freq: MouseX.kr(300, 2500), mul: MouseY.kr(0, 1))}.play;
 
+s = Server.local;
 s.boot;
 s.quit;
 
-{SinOsc.kr(1).poll}.play;
 
+{SinOsc.kr(1).poll}.play;
 {
 	RLPF.ar(
 		Dust.ar([5, 20]), // input signal, 2 channels
@@ -139,7 +140,7 @@ Env.linen(1, 2, 1, 0.02).plot;
 
 ({
 	var freqEnv = Env.pairs([[0, 100], [0.4, 1000], [0.9, 400], [1.1, 555], [2, 220]], \lin);
-	freqEnv.plot;
+//	freqEnv.plot;
 	SinOsc.ar(freqEnv.kr, mul: 0.2);
 }.play;)
 
@@ -245,8 +246,8 @@ SynthDef("pluck", {arg amp = 0.1, freq = 440, decay = 5, mutedString = 0.1; var 
 // From https://rhoadley.net/courses/tech_resources/supercollider/tutorials/cottle/CMSC7105.pdf
 (
 {
-var harmonics = 12, fund = 30;
-Mix.fill(harmonics,
+	var harmonics = 25, fund = 30;
+	Mix.fill(harmonics,
 		{arg count;
 			Pan2.ar(
 				SinOsc.ar(fund * (count+1),
@@ -255,7 +256,7 @@ Mix.fill(harmonics,
 				0.5
 			)
 		}
-)*0.07}.play
+	)*0.07}.play
 )
 
 ~myControlBus = Bus.control(s, 1);
