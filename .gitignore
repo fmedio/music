@@ -1,3 +1,6 @@
-*.aup
+.stack-work/
+music.cabal
+*.lock
+*~*.aup
 *.wav
 *_data/
