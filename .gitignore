@@ -5,3 +5,4 @@ music.cabal
 *.wav
 *_data/
 target/
+gen/
