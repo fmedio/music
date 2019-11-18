@@ -4,3 +4,4 @@ music.cabal
 *~*.aup
 *.wav
 *_data/
+target/
