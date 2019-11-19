@@ -8,7 +8,12 @@ enum class Sign {
     SHARP
 }
 
-enum class Note {
+enum class Mode {
+    MAJOR,
+    MINOR
+}
+
+enum class Fundamental {
     A,
     B,
     C,
@@ -20,11 +25,12 @@ enum class Note {
 
 
 class Chord {
-    val fundamental: Note?
+    val fundamental: Fundamental?
     val sign: Sign?
+    val mode: Mode?
 
     constructor(cc: ANTLRParserParser.ChordContext) {
-        fundamental = Note.valueOf(cc.NOTE().text)
+        fundamental = Fundamental.valueOf(cc.FUNDAMENTAL().text)
         sign = if (cc.SIGN() == null) {
             Sign.NATURAL
         } else {
@@ -32,6 +38,12 @@ class Chord {
                 Sign.SHARP
             else
                 Sign.FLAT
+        }
+
+        mode = if (cc.MINOR() == null) {
+            Mode.MAJOR
+        } else {
+            Mode.MINOR
         }
     }
 }
