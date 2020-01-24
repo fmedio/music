@@ -6,3 +6,4 @@ music.cabal
 *_data/
 target/
 gen/
+*.aup

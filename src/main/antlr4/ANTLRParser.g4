@@ -2,17 +2,46 @@
 
 grammar ANTLRParser;
 
-expression: chord+;
+expression:
+    stop_exp |
+    append_exp |
+    replace_exp;
 
-chord: NOTE SIGN? MINOR? interval_spec_list? bass_spec?;
+stop_exp: STOP;
+
+replace_exp: REPLACE? sequence_exp;
+
+append_exp: APPEND sequence_exp;
+
+sequence_exp: loop_exp | chord_list;
+
+loop_exp: LOOP INTEGER chord_list;
+
+chord_list: chord+;
+
+chord: NOTE SIGN? MINOR? interval_spec_list? bass_spec? duration_spec?;
 
 interval_spec_list: interval_spec+;
 
-interval_spec: INTERVAL (AUGMENTED | DIMINISHED)?;
+duration_spec: DURATION_SEPARATOR INTEGER;
+
+interval_spec: interval (AUGMENTED | DIMINISHED)?;
+
+interval: INTEGER | '7M';
 
 bass_spec: BASS_SEPARATOR NOTE SIGN?;
 
+LOOP: 'loop' | 'l';
+
+APPEND: 'append' | 'a' ;
+
+REPLACE: 'replace' | 'r' ;
+
+STOP: 'stop' | 's' ;
+
 BASS_SEPARATOR: '/';
+
+DURATION_SEPARATOR: ':';
 
 DIMINISHED: '-';
 
@@ -20,10 +49,12 @@ AUGMENTED: '+';
 
 MINOR: 'm';
 
-INTERVAL: '2' | '3' | '4' | '5' | '6' | '7' | '7M' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
+
 
 SIGN: '#' | 'b';
 
 NOTE: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+
+INTEGER: [0-9]+;
 
 WS  :   [ \t\n\r]+ -> skip ;
