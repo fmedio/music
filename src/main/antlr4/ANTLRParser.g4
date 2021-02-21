@@ -2,18 +2,11 @@ grammar ANTLRParser;
 
 expression:
     stop_exp |
-    append_exp |
-    replace_exp;
+    play_exp;
 
 stop_exp: STOP;
 
-replace_exp: REPLACE? sequence_exp;
-
-append_exp: APPEND sequence_exp;
-
-sequence_exp: loop_exp | chord_list;
-
-loop_exp: LOOP INTEGER chord_list;
+play_exp: PLAY chord_list;
 
 chord_list: chord+;
 
@@ -27,11 +20,7 @@ interval_spec: INTEGER (AUGMENTED | DIMINISHED)?;
 
 bass_spec: BASS_SEPARATOR NOTE SIGN?;
 
-LOOP: 'loop' | 'l';
-
-APPEND: 'append' | 'a' ;
-
-REPLACE: 'replace' | 'r' ;
+PLAY: 'play' | 'p' ;
 
 STOP: 'stop' | 's' ;
 

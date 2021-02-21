@@ -1,28 +1,38 @@
-package music.chordy.parser;
+package music.chordy.parser
 
 import music.chordy.Chord
 import music.chordy.Interval
+import music.chordy.SequenceBuilder
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.BufferedTokenStream
-import org.antlr.v4.runtime.UnbufferedCharStream
-import java.io.StringBufferInputStream
 import java.io.StringReader
+import javax.sound.midi.Sequencer
 
 class ParserFacade {
-  class Visitor : ANTLRParserBaseVisitor<Int>() {
-      override fun visitAppend_exp(ctx: ANTLRParserParser.Append_expContext?): Int {
-          visitChildren(ctx)
-          return 0
-      }
+    fun eval(exp: String, sequencer: Sequencer) {
+        val exp = parser(exp).expression()
 
-      override fun visitChord(ctx: ANTLRParserParser.ChordContext?): Int {
-          return 0
-      }
-  }
+        class Visitor : ANTLRParserBaseVisitor<Unit>() {
+            val chords = mutableListOf<Chord>()
 
-    fun eval(s: String) {
-        val exp = parser(s).expression()
-        Visitor().visit(exp)
+            override fun visitStop_exp(ctx: ANTLRParserParser.Stop_expContext?) {
+                sequencer.stop()
+            }
+
+            override fun visitChord(ctx: ANTLRParserParser.ChordContext?) {
+                ctx?.let { cc -> chords.add(Chord(cc)) }
+            }
+
+            override fun visitPlay_exp(ctx: ANTLRParserParser.Play_expContext?) {
+                ctx?.chord_list()?.accept(this)
+                val sequence = SequenceBuilder().sequence(chords)
+                sequencer.stop()
+                sequencer.sequence = sequence
+                sequencer.start()
+            }
+        }
+
+        exp.accept(Visitor())
     }
 
     private fun parser(s: String): ANTLRParserParser {
