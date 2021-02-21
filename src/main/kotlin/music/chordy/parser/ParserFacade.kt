@@ -1,6 +1,7 @@
 package music.chordy.parser;
 
 import music.chordy.Chord
+import music.chordy.Interval
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.BufferedTokenStream
 import org.antlr.v4.runtime.UnbufferedCharStream
@@ -33,5 +34,10 @@ class ParserFacade {
     fun evalChord(s: String) : Chord {
         val chordContext = parser(s).chord()
         return Chord(chordContext)
+    }
+
+    fun evalInterval(s: String) : Interval {
+        val ctx = parser(s).interval_spec()
+        return Interval(ctx)
     }
 }

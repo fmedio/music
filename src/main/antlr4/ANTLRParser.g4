@@ -1,5 +1,3 @@
-
-
 grammar ANTLRParser;
 
 expression:
@@ -21,13 +19,11 @@ chord_list: chord+;
 
 chord: NOTE SIGN? MINOR? interval_spec_list? bass_spec? duration_spec?;
 
-interval_spec_list: interval_spec+;
+interval_spec_list: interval_spec (INTERVAL_SEPARATOR interval_spec_list)?;
 
 duration_spec: DURATION_SEPARATOR INTEGER;
 
-interval_spec: interval (AUGMENTED | DIMINISHED)?;
-
-interval: INTEGER | '7M';
+interval_spec: INTEGER (AUGMENTED | DIMINISHED)?;
 
 bass_spec: BASS_SEPARATOR NOTE SIGN?;
 
@@ -40,6 +36,8 @@ REPLACE: 'replace' | 'r' ;
 STOP: 'stop' | 's' ;
 
 BASS_SEPARATOR: '/';
+
+INTERVAL_SEPARATOR: ',';
 
 DURATION_SEPARATOR: ':';
 

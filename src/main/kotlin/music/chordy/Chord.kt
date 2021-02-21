@@ -1,8 +1,11 @@
 package music.chordy
 
+import music.chordy.parser.ANTLRParserBaseVisitor
 import music.chordy.parser.ANTLRParserParser
+import org.antlr.v4.runtime.tree.ParseTree
+import org.antlr.v4.runtime.tree.ParseTreeVisitor
 
-class Chord {
+class Chord  {
     companion object {
         val scale = listOf(
             Pair("C", 60),
@@ -18,11 +21,12 @@ class Chord {
         val minorTriad = listOf(0, 3, 4)
     }
 
-    val notes: Set<Int>
+    val notes: MutableSet<Int> = mutableSetOf()
+    private val fundamental: Int
 
     constructor(cc: ANTLRParserParser.ChordContext) {
         val base = scale.get(cc.NOTE().text)!!
-        val fundamental = cc.SIGN()?.let {
+        fundamental = cc.SIGN()?.let {
             if ("#".equals(it.text)) {
                 base + 1
             } else {
@@ -32,6 +36,15 @@ class Chord {
 
 
         val triad = cc.MINOR()?.let { minorTriad } ?: majorTriad
-        notes = triad.fold(listOf(fundamental), { acc: List<Int>, i: Int -> acc.plus(i + acc.last()) }).toSet()
+        notes.addAll(triad.fold(listOf(fundamental), { acc: List<Int>, i: Int -> acc.plus(i + acc.last()) }))
+
+
+        class Visitor : ANTLRParserBaseVisitor<Unit>() {
+            override fun visitInterval_spec(ctx: ANTLRParserParser.Interval_specContext?): Unit {
+                ctx.let { x -> notes.add(Interval(x!!).offset + fundamental) }
+            }
+        }
+        cc.accept(Visitor())
     }
+
 }
