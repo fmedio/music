@@ -3,7 +3,8 @@ package music.chordy.parser;
 import music.chordy.Chord
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.BufferedTokenStream
-import org.antlr.v4.runtime.tree.ParseTreeVisitor
+import org.antlr.v4.runtime.UnbufferedCharStream
+import java.io.StringBufferInputStream
 import java.io.StringReader
 
 class ParserFacade {
@@ -19,10 +20,18 @@ class ParserFacade {
   }
 
     fun eval(s: String) {
+        val exp = parser(s).expression()
+        Visitor().visit(exp)
+    }
+
+    private fun parser(s: String): ANTLRParserParser {
         var lexer = ANTLRParserLexer(ANTLRInputStream(StringReader(s)))
         var input = BufferedTokenStream(lexer)
-        var parser = ANTLRParserParser(input)
-        val exp = parser.expression()
-        Visitor().visit(exp)
+        return ANTLRParserParser(input)
+    }
+
+    fun evalChord(s: String) : Chord {
+        val chordContext = parser(s).chord()
+        return Chord(chordContext)
     }
 }

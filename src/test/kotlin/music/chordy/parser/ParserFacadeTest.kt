@@ -1,17 +1,23 @@
 package music.chordy.parser;
 
-import music.chordy.Note
-import music.chordy.Sign
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertTrue
 
 
 class ParserFacadeTest {
     @Test
     fun testBasic() {
-        val parser = ParserFacade()
-//        val chords = parser.parse("a C D#m Eb7")
-//        assertEquals(Note.C, chords[0].fundamental)
+        var chord = ParserFacade().evalChord("C")
+        assertTrue(chord.notes.contains(60))
+        assertTrue(chord.notes.contains(64))
+        assertTrue(chord.notes.contains(67))
+
+        chord = ParserFacade().evalChord("Cm")
+        assertTrue(chord.notes.contains(60))
+        assertTrue(chord.notes.contains(63))
+        assertTrue(chord.notes.contains(67))
+
+        //        assertEquals(Note.C, chords[0].fundamental)
 //        assertEquals(Sign.NATURAL, chords[0].sign)
 //
 //        assertEquals(Note.D, chords[1].fundamental)
