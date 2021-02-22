@@ -25,12 +25,12 @@ class ChordTest {
     }
 
     @Test
-    fun octaveDrop() {
-        val chord = ParserFacade().evalChord("Cm@-1")
-        kotlin.test.assertTrue(chord.notes.contains(36))
-        kotlin.test.assertTrue(chord.notes.contains(48))
-        kotlin.test.assertTrue(chord.notes.contains(51))
-        kotlin.test.assertTrue(chord.notes.contains(55))
+    fun testBassOctave() {
+        val chord = ParserFacade().evalChord("Cm/G2")
+        kotlin.test.assertTrue(chord.notes.contains(43))
+        kotlin.test.assertTrue(chord.notes.contains(60))
+        kotlin.test.assertTrue(chord.notes.contains(63))
+        kotlin.test.assertTrue(chord.notes.contains(67))
     }
 
     @Test

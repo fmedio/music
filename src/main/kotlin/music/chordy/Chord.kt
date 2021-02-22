@@ -52,15 +52,9 @@ class Chord  {
             override fun visitBass_spec(ctx: ANTLRParserParser.Bass_specContext?) {
                 ctx.let {
                     val bass = parseNote(it!!.NOTE().text!!, it.SIGN()?.text)
-                    notes.add(bass - 12)
-                }
-            }
-
-            override fun visitOctave_spec(ctx: ANTLRParserParser.Octave_specContext?) {
-                ctx.let {
-                    val octaves = (it!!.MINUS().text ?: it.PLUS().text!!) + it.INTEGER().text
-                    val shift = 12 * octaves.toInt()
-                    notes = notes.map { n -> n + shift }.toMutableSet()
+                    val octave = it.INTEGER()?.text?.toInt() ?: 3
+                    val bassNote = bass - ((4 - octave) * 12)
+                    notes.add(bassNote)
                 }
             }
         }
