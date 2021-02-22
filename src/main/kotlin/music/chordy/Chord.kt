@@ -2,8 +2,6 @@ package music.chordy
 
 import music.chordy.parser.ANTLRParserBaseVisitor
 import music.chordy.parser.ANTLRParserParser
-import org.antlr.v4.runtime.tree.ParseTree
-import org.antlr.v4.runtime.tree.ParseTreeVisitor
 
 class Chord  {
     companion object {
@@ -19,6 +17,7 @@ class Chord  {
 
         val majorTriad = listOf(0, 4, 3)
         val minorTriad = listOf(0, 3, 4)
+        val diminishedChord = listOf(0, 3, 3, 3)
     }
 
     val notes: MutableSet<Int> = mutableSetOf()
@@ -35,8 +34,10 @@ class Chord  {
         } ?: base
 
 
-        val triad = cc.MINOR()?.let { minorTriad } ?: majorTriad
-        notes.addAll(triad.fold(listOf(fundamental), { acc: List<Int>, i: Int -> acc.plus(i + acc.last()) }))
+        val baseChord = cc.MINOR()?.let { minorTriad } ?:
+                        cc.DIM()?.let { diminishedChord } ?:
+                        majorTriad
+        notes.addAll(baseChord.fold(listOf(fundamental), { acc: List<Int>, i: Int -> acc.plus(i + acc.last()) }))
 
 
         class Visitor : ANTLRParserBaseVisitor<Unit>() {

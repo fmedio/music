@@ -7,18 +7,32 @@ class ChordTest {
     // TODO: remove natural 5th when explicitely altered, or when the chord gets busy?
 
     @Test
-    fun testBasic() {
-        var chord = ParserFacade().evalChord("C")
+    fun testMajor() {
+        val chord = ParserFacade().evalChord("C")
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(64))
         kotlin.test.assertTrue(chord.notes.contains(67))
+    }
 
-        chord = ParserFacade().evalChord("Cm")
+    @Test
+    fun testMinor() {
+        val chord = ParserFacade().evalChord("Cm")
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(63))
         kotlin.test.assertTrue(chord.notes.contains(67))
+    }
 
-        chord = ParserFacade().evalChord("Cm7,7+,9+")
+    @Test
+    fun testDim() {
+        val chord = ParserFacade().evalChord("Cdim")
+        kotlin.test.assertTrue(chord.notes.contains(60))
+        kotlin.test.assertTrue(chord.notes.contains(63))
+        kotlin.test.assertTrue(chord.notes.contains(66))
+    }
+
+    @Test
+    fun testIntervals() {
+        val chord = ParserFacade().evalChord("Cm7,7+,9+")
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(63))
         kotlin.test.assertTrue(chord.notes.contains(67))

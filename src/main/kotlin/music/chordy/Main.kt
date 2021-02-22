@@ -1,7 +1,8 @@
-package music
+package music.chordy
 
 import music.chordy.parser.ParserFacade
 import javax.sound.midi.MidiSystem
+
 
 fun main(args: Array<String>) {
     val sequencer = MidiSystem.getSequencer()

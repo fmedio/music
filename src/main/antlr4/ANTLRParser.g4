@@ -10,13 +10,13 @@ play_exp: PLAY chord_list;
 
 chord_list: chord+;
 
-chord: NOTE SIGN? MINOR? interval_spec_list? bass_spec? duration_spec?;
+chord: NOTE SIGN? (MINOR | DIM)? interval_spec_list? bass_spec? duration_spec?;
 
 interval_spec_list: interval_spec (INTERVAL_SEPARATOR interval_spec_list)?;
 
 duration_spec: DURATION_SEPARATOR INTEGER;
 
-interval_spec: INTEGER (AUGMENTED | DIMINISHED)?;
+interval_spec: INTEGER (PLUS | MINUS)?;
 
 bass_spec: BASS_SEPARATOR NOTE SIGN?;
 
@@ -30,13 +30,13 @@ INTERVAL_SEPARATOR: ',';
 
 DURATION_SEPARATOR: ':';
 
-DIMINISHED: '-';
+PLUS: '+';
 
-AUGMENTED: '+';
+MINUS: '-';
 
 MINOR: 'm';
 
-
+DIM: 'dim';
 
 SIGN: '#' | 'b';
 

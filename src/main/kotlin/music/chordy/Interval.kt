@@ -14,8 +14,8 @@ class Interval {
             offset += parse(x.text!!.toInt(), 0)
          } ?: 0
 
-        offset += ctx.AUGMENTED()?.let { 1 } ?: 0
-        offset -= ctx.DIMINISHED()?.let { 1 } ?: 0
+        offset += ctx.PLUS()?.let { 1 } ?: 0
+        offset -= ctx.MINUS()?.let { 1 } ?: 0
     }
 
     private fun parse(notation: Int, offset: Int) : Int {

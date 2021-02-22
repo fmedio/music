@@ -28,6 +28,7 @@ class ParserFacade {
                 val sequence = SequenceBuilder().sequence(chords)
                 sequencer.stop()
                 sequencer.sequence = sequence
+                sequencer.tempoInBPM = 50f
                 sequencer.start()
             }
         }
