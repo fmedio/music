@@ -1,8 +1,11 @@
 grammar ANTLRParser;
 
 expression:
+    tempo_exp |
     stop_exp |
     play_exp;
+
+tempo_exp: TEMPO INTEGER;
 
 stop_exp: STOP;
 
@@ -10,9 +13,11 @@ play_exp: PLAY chord_list;
 
 chord_list: chord+;
 
-chord: NOTE SIGN? (MINOR | DIM)? interval_spec_list? bass_spec? duration_spec?;
+chord: NOTE SIGN? (MINOR | DIM)? interval_spec_list? bass_spec? octave_spec? duration_spec?;
 
 interval_spec_list: interval_spec (INTERVAL_SEPARATOR interval_spec_list)?;
+
+octave_spec: OCTAVE_SEPARATOR (PLUS | MINUS) INTEGER;
 
 duration_spec: DURATION_SEPARATOR INTEGER;
 
@@ -24,11 +29,15 @@ PLAY: 'play' | 'p' ;
 
 STOP: 'stop' | 's' ;
 
+TEMPO: 'tempo' | 't';
+
 BASS_SEPARATOR: '/';
 
 INTERVAL_SEPARATOR: ',';
 
 DURATION_SEPARATOR: ':';
+
+OCTAVE_SEPARATOR: '@';
 
 PLUS: '+';
 

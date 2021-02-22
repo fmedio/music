@@ -20,29 +20,48 @@ class Chord  {
         val diminishedChord = listOf(0, 3, 3, 3)
     }
 
-    val notes: MutableSet<Int> = mutableSetOf()
+    var notes = mutableSetOf<Int>()
     private val fundamental: Int
 
-    constructor(cc: ANTLRParserParser.ChordContext) {
-        val base = scale.get(cc.NOTE().text)!!
-        fundamental = cc.SIGN()?.let {
-            if ("#".equals(it.text)) {
-                base + 1
+    fun parseNote(note: String, modifier: String?): Int {
+        val base = scale[note]!!
+
+        return modifier?.let { x ->
+            if ("#".equals(x)) {
+                return base + 1
             } else {
-                base - 1
+                return base - 1
             }
         } ?: base
+    }
 
+    constructor(cc: ANTLRParserParser.ChordContext) {
+        fundamental = parseNote(cc.NOTE().text!!, cc.SIGN()?.text)
 
-        val baseChord = cc.MINOR()?.let { minorTriad } ?:
-                        cc.DIM()?.let { diminishedChord } ?:
-                        majorTriad
+        val baseChord = cc.MINOR()?.let { minorTriad } ?: cc.DIM()?.let { diminishedChord } ?: majorTriad
+
         notes.addAll(baseChord.fold(listOf(fundamental), { acc: List<Int>, i: Int -> acc.plus(i + acc.last()) }))
 
+        cc.bass_spec() ?: notes.add(fundamental - 12)
 
         class Visitor : ANTLRParserBaseVisitor<Unit>() {
             override fun visitInterval_spec(ctx: ANTLRParserParser.Interval_specContext?): Unit {
-                ctx.let { x -> notes.add(Interval(x!!).offset + fundamental) }
+                ctx.let { notes.add(Interval(it!!).offset + fundamental) }
+            }
+
+            override fun visitBass_spec(ctx: ANTLRParserParser.Bass_specContext?) {
+                ctx.let {
+                    val bass = parseNote(it!!.NOTE().text!!, it.SIGN()?.text)
+                    notes.add(bass - 12)
+                }
+            }
+
+            override fun visitOctave_spec(ctx: ANTLRParserParser.Octave_specContext?) {
+                ctx.let {
+                    val octaves = (it!!.MINUS().text ?: it.PLUS().text!!) + it.INTEGER().text
+                    val shift = 12 * octaves.toInt()
+                    notes = notes.map { n -> n + shift }.toMutableSet()
+                }
             }
         }
         cc.accept(Visitor())

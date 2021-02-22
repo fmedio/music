@@ -11,6 +11,6 @@ class SequenceBuilderTest {
         val chords = listOf("C", "Am", "F", "G").map(parser::evalChord).toList()
         val sequence = SequenceBuilder().sequence(chords)
         assertEquals(4, sequence.tickLength)
-        assertEquals(25, sequence.tracks[0].size())
+        assertEquals(33, sequence.tracks[0].size())
     }
 }

@@ -9,14 +9,34 @@ class ChordTest {
     @Test
     fun testMajor() {
         val chord = ParserFacade().evalChord("C")
+        kotlin.test.assertTrue(chord.notes.contains(48))
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(64))
         kotlin.test.assertTrue(chord.notes.contains(67))
     }
 
     @Test
+    fun testBass() {
+        val chord = ParserFacade().evalChord("C/G")
+        kotlin.test.assertTrue(chord.notes.contains(55))
+        kotlin.test.assertTrue(chord.notes.contains(60))
+        kotlin.test.assertTrue(chord.notes.contains(64))
+        kotlin.test.assertTrue(chord.notes.contains(67))
+    }
+
+    @Test
+    fun octaveDrop() {
+        val chord = ParserFacade().evalChord("Cm@-1")
+        kotlin.test.assertTrue(chord.notes.contains(36))
+        kotlin.test.assertTrue(chord.notes.contains(48))
+        kotlin.test.assertTrue(chord.notes.contains(51))
+        kotlin.test.assertTrue(chord.notes.contains(55))
+    }
+
+    @Test
     fun testMinor() {
         val chord = ParserFacade().evalChord("Cm")
+        kotlin.test.assertTrue(chord.notes.contains(48))
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(63))
         kotlin.test.assertTrue(chord.notes.contains(67))
@@ -25,6 +45,7 @@ class ChordTest {
     @Test
     fun testDim() {
         val chord = ParserFacade().evalChord("Cdim")
+        kotlin.test.assertTrue(chord.notes.contains(48))
         kotlin.test.assertTrue(chord.notes.contains(60))
         kotlin.test.assertTrue(chord.notes.contains(63))
         kotlin.test.assertTrue(chord.notes.contains(66))
