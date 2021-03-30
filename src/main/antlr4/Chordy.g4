@@ -1,4 +1,4 @@
-grammar ANTLRParser;
+grammar Chordy;
 
 expression:
     tempo_exp |

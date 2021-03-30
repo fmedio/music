@@ -1,7 +1,7 @@
 package music.chordy
 
-import music.chordy.parser.ANTLRParserBaseVisitor
-import music.chordy.parser.ANTLRParserParser
+import music.chordy.parser.ChordyBaseVisitor
+import music.chordy.parser.ChordyParser
 
 class Chord  {
     companion object {
@@ -35,7 +35,7 @@ class Chord  {
         } ?: base
     }
 
-    constructor(cc: ANTLRParserParser.ChordContext) {
+    constructor(cc: ChordyParser.ChordContext) {
         fundamental = parseNote(cc.NOTE().text!!, cc.SIGN()?.text)
 
         val baseChord = cc.MINOR()?.let { minorTriad } ?: cc.DIM()?.let { diminishedChord } ?: majorTriad
@@ -44,12 +44,12 @@ class Chord  {
 
         cc.bass_spec() ?: notes.add(fundamental - 12)
 
-        class Visitor : ANTLRParserBaseVisitor<Unit>() {
-            override fun visitInterval_spec(ctx: ANTLRParserParser.Interval_specContext?): Unit {
+        class Visitor : ChordyBaseVisitor<Unit>() {
+            override fun visitInterval_spec(ctx: ChordyParser.Interval_specContext?): Unit {
                 ctx.let { notes.add(Interval(it!!).offset + fundamental) }
             }
 
-            override fun visitBass_spec(ctx: ANTLRParserParser.Bass_specContext?) {
+            override fun visitBass_spec(ctx: ChordyParser.Bass_specContext?) {
                 ctx.let {
                     val bass = parseNote(it!!.NOTE().text!!, it.SIGN()?.text)
                     val octave = it.INTEGER()?.text?.toInt() ?: 3

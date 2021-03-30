@@ -12,18 +12,18 @@ class ParserFacade {
     fun eval(exp: String, state: SequencerState) {
         val exp = parser(exp).expression()
 
-        class Visitor : ANTLRParserBaseVisitor<Unit>() {
+        class Visitor : ChordyBaseVisitor<Unit>() {
             val chords = mutableListOf<Chord>()
 
-            override fun visitStop_exp(ctx: ANTLRParserParser.Stop_expContext?) {
+            override fun visitStop_exp(ctx: ChordyParser.Stop_expContext?) {
                 state.sequencer.stop()
             }
 
-            override fun visitChord(ctx: ANTLRParserParser.ChordContext?) {
+            override fun visitChord(ctx: ChordyParser.ChordContext?) {
                 ctx?.let { cc -> chords.add(Chord(cc)) }
             }
 
-            override fun visitPlay_exp(ctx: ANTLRParserParser.Play_expContext?) {
+            override fun visitPlay_exp(ctx: ChordyParser.Play_expContext?) {
                 ctx?.chord_list()?.accept(this)
                 val sequence = SequenceBuilder().sequence(chords)
                 state.sequencer.stop()
@@ -32,7 +32,7 @@ class ParserFacade {
                 state.sequencer.start()
             }
 
-            override fun visitTempo_exp(ctx: ANTLRParserParser.Tempo_expContext?) {
+            override fun visitTempo_exp(ctx: ChordyParser.Tempo_expContext?) {
                 ctx.let {
                     state.tempoBPM = it!!.INTEGER().text.toFloat()
                 }
@@ -42,18 +42,18 @@ class ParserFacade {
         exp.accept(Visitor())
     }
 
-    private fun parser(s: String): ANTLRParserParser {
-        var lexer = ANTLRParserLexer(ANTLRInputStream(StringReader(s)))
+    private fun parser(s: String): ChordyParser {
+        var lexer = ChordyLexer(ANTLRInputStream(StringReader(s)))
         var input = BufferedTokenStream(lexer)
-        return ANTLRParserParser(input)
+        return ChordyParser(input)
     }
 
-    fun evalChord(s: String) : Chord {
+    fun evalChord(s: String): Chord {
         val chordContext = parser(s).chord()
         return Chord(chordContext)
     }
 
-    fun evalInterval(s: String) : Interval {
+    fun evalInterval(s: String): Interval {
         val ctx = parser(s).interval_spec()
         return Interval(ctx)
     }
