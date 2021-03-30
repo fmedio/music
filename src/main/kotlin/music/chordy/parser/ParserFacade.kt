@@ -32,6 +32,18 @@ class ParserFacade {
                 state.sequencer.start()
             }
 
+            override fun visitLoop_exp(ctx: ChordyParser.Loop_expContext?) {
+                ctx?.chord_list()?.accept(this)
+                val sequence = SequenceBuilder().sequence(chords)
+                state.sequencer.stop()
+                state.sequencer.loopStartPoint = 0
+                state.sequencer.tempoInBPM = state.tempoBPM
+                state.sequencer.sequence = sequence
+                state.sequencer.loopEndPoint = sequence.tickLength
+                state.sequencer.loopCount = Integer.MAX_VALUE
+                state.sequencer.start()
+            }
+
             override fun visitTempo_exp(ctx: ChordyParser.Tempo_expContext?) {
                 ctx.let {
                     state.tempoBPM = it!!.INTEGER().text.toFloat()

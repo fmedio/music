@@ -15,7 +15,22 @@ class ParserFacadeTest {
         assertEquals(420f, seqState.tempoBPM)
     }
 
+    @Test
+    fun testLoop() {
+        val sequencer = StubSeq()
+        val seqState = SequencerState(sequencer, 100f)
+        ParserFacade().eval("loop C Am F G", seqState)
+        assertEquals(0, sequencer.loopStartPoint)
+        assertEquals(4, sequencer.loopEndPoint)
+    }
+
     class StubSeq : Sequencer {
+
+        private var loopStart: Long = 0
+        private var loopEnd: Long = 0
+        private var tempoBPM: Float = 0f
+        private var loopCount: Int = 0
+
         override fun close() {
             TODO("Not yet implemented")
         }
@@ -61,7 +76,7 @@ class ParserFacadeTest {
         }
 
         override fun setSequence(sequence: Sequence?) {
-            TODO("Not yet implemented")
+
         }
 
         override fun setSequence(stream: InputStream?) {
@@ -73,11 +88,9 @@ class ParserFacadeTest {
         }
 
         override fun start() {
-            TODO("Not yet implemented")
         }
 
         override fun stop() {
-            TODO("Not yet implemented")
         }
 
         override fun isRunning(): Boolean {
@@ -105,11 +118,11 @@ class ParserFacadeTest {
         }
 
         override fun getTempoInBPM(): Float {
-            TODO("Not yet implemented")
+            return tempoInBPM
         }
 
         override fun setTempoInBPM(bpm: Float) {
-            TODO("Not yet implemented")
+            tempoBPM = bpm
         }
 
         override fun getTempoInMPQ(): Float {
@@ -208,27 +221,27 @@ class ParserFacadeTest {
         }
 
         override fun setLoopStartPoint(tick: Long) {
-            TODO("Not yet implemented")
+            loopStart = tick
         }
 
         override fun getLoopStartPoint(): Long {
-            TODO("Not yet implemented")
+            return loopStart
         }
 
         override fun setLoopEndPoint(tick: Long) {
-            TODO("Not yet implemented")
+            loopEnd = tick
         }
 
         override fun getLoopEndPoint(): Long {
-            TODO("Not yet implemented")
+            return loopEnd
         }
 
         override fun setLoopCount(count: Int) {
-            TODO("Not yet implemented")
+            loopCount = count
         }
 
         override fun getLoopCount(): Int {
-            TODO("Not yet implemented")
+            return loopCount
         }
 
     }

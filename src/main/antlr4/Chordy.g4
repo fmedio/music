@@ -3,13 +3,16 @@ grammar Chordy;
 expression:
     tempo_exp |
     stop_exp |
-    play_exp;
+    play_exp |
+    loop_exp;
 
 tempo_exp: TEMPO INTEGER;
 
 stop_exp: STOP;
 
 play_exp: PLAY chord_list;
+
+loop_exp: LOOP chord_list;
 
 chord_list: chord+;
 
@@ -26,6 +29,8 @@ bass_spec: BASS_SEPARATOR NOTE SIGN? INTEGER?;
 PLAY: 'play' | 'p' ;
 
 STOP: 'stop' | 's' ;
+
+LOOP: 'loop' | 'l';
 
 TEMPO: 'tempo' | 't';
 
