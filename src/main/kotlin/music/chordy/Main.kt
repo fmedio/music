@@ -1,8 +1,7 @@
 package music.chordy
 
 import music.chordy.parser.ParserFacade
-import javax.sound.midi.MidiSystem
-import javax.sound.midi.Sequencer
+import javax.sound.midi.*
 
 
 class SequencerState(val sequencer: Sequencer, var tempoBPM: Float = 120f)

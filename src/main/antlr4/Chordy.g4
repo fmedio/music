@@ -16,15 +16,13 @@ loop_exp: LOOP chord_list;
 
 chord_list: chord+;
 
-chord: NOTE SIGN? (MINOR | DIM)? interval_spec_list? bass_spec? duration_spec?;
+chord: DEGREE SIGN? (MINOR | DIM)? interval_spec_list? bass_spec? duration_spec?;
 
 interval_spec_list: interval_spec (INTERVAL_SEPARATOR interval_spec_list)?;
 
 duration_spec: DURATION_SEPARATOR INTEGER;
 
 interval_spec: INTEGER (PLUS | MINUS)?;
-
-bass_spec: BASS_SEPARATOR NOTE SIGN? INTEGER?;
 
 PLAY: 'play' | 'p' ;
 
@@ -34,12 +32,9 @@ LOOP: 'loop' | 'l';
 
 TEMPO: 'tempo' | 't';
 
-BASS_SEPARATOR: '/';
-
 INTERVAL_SEPARATOR: ',';
 
 DURATION_SEPARATOR: ':';
-
 
 PLUS: '+';
 
@@ -51,7 +46,15 @@ DIM: 'dim';
 
 SIGN: '#' | 'b';
 
-NOTE: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+DEGREE: I | II | III | IV | V | VI | VII;
+
+I: 'i' | 'I';
+II: 'ii' | 'II';
+III: 'iii' | 'III';
+IV: 'iv' | 'IV';
+V: 'v' | 'V';
+VI: 'vi' | 'VI';
+VII: 'vii' | 'VII';
 
 INTEGER: [0-9]+;
 
