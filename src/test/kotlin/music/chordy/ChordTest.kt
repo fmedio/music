@@ -7,6 +7,10 @@ class ChordTest {
     // TODO: remove natural 5th when explicitely altered, or when the chord gets busy?
 
     @Test
+    fun testBitset() {
+
+    }
+    @Test
     fun testMajor() {
         val chord = ParserFacade().evalChord("C")
         kotlin.test.assertTrue(chord.notes.contains(48))
