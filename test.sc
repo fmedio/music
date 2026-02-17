@@ -298,4 +298,3 @@ x = Synth("simple", [\freq, 800]);
 x.set(\freq, ~oneBus.asMap);
 x.set(\freq, ~anotherBus.asMap);
 x.free;
-
