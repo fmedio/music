@@ -1,3 +1,4 @@
+//Quarks.install("https://github.com/supercollider/scel");
 42
 "Hello World!".postln;
 // s is server
