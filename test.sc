@@ -80,8 +80,6 @@ x.free;
 // Use explicit bus for routing
 f = {Out.ar(0, BPF.ar(in: In.ar(55), freq: MouseY.kr(200, 5000), rq: 0.01))}.play;
 n = {Out.ar(55, WhiteNoise.ar(0.5))}.play;
-
-
 {FreeVerb.ar(SoundIn.ar([0, 1]), mix: 0.5, room: 0.9)}.play;
 
 
@@ -108,7 +106,7 @@ a = {Out.ar(55, SinOsc.ar(freq: [800, 880], mul: [LFPulse.ar(2), LFPulse.ar(2)])
 
 { Mix.fill(16, {SinOsc.ar(rrand(100, 3000), mul: 0.01)}) }.play;
 
-~cucumber = Buffer.read(s, "/Users/fabrice.medio/Documents/git/music/cucumber.wav");
+~cucumber = Buffer.read(s, "/home/fabrice/Music/cucumber/export/session.wav");
 
 {PlayBuf.ar(1, ~cucumber, MouseY.kr(-3, 3), loop: 1)}.play(outbus: [0, 1]);
 
